@@ -5,36 +5,32 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <list>
 #include <fstream>
+#include <unordered_map>
 
-typedef struct vertex {
-   int value; // dado armazenado no vértice
-   struct vertex *pi; // pai do vértice
-   int d; // distância da fonte
-} vertex;
-
-typedef struct{
-    vertex *u; // vértice inicial (dígrafos)
-    vertex *v; // vértice final (dígrafos)
-    int w; // peso
-} edge;
+struct Vertex {
+    int val;
+    Vertex *pi;
+    int d;
+    std::unordered_map<int, int> adj;
+    Vertex(const int& v) : val(v), d(-1) {}
+};
 
 class Graph {
 public:
-    Graph();
+    Graph(std::istream &f);
     ~Graph(){};
-    // Funções públicas caso deseje-se construir um grafo
-    // manualmente. Para efeito deste trabalho, contudo,
-    // são utilizadas apenas dentro desta classe.
-    void addVertex(vertex v);
-    void addEdge(edge e);
-    int getNVertex();
-    void buildFromFile(std::istream &f);
-private:
-    int nVertex; // número de vértices
-    std::list<vertex> V;
-    std::list<edge> E;
+    std::string to_string(); // Imprime informações básicas sobre o grafo
+    void dijkstra(int s);
+    void dag_shortest_paths();
+protected:
+    int n; // número de vértices
+    std::unordered_map<int, Vertex*> V;
+    void addEdge(int u, int v, int w);
+    // Funções auxiliares
+    void initialize_single_source(int s);
+    Vertex* extract_min(std::unordered_map<int, Vertex*> *queue);
+    void relax(Vertex *u, Vertex *v, int w);
 };
 
 

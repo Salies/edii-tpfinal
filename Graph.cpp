@@ -3,75 +3,75 @@
 //
 
 #include "Graph.h"
-#include <sstream>
 #include <string>
+#include <vector>
+#include <queue>
+#include <limits>
 
 #include <iostream>
 
-Graph::Graph(){
-    this->V = {};
-    this->E = {};
+Graph::Graph(std::istream &f){
+    int a, b, c; // variáveis para receber os valores
+    f >> a;
+    this->n = a;
+    while(f >> a >> b >> c){
+        this->addEdge(a, b, c);
+    }
 }
 
-void Graph::addVertex(vertex v){
+void Graph::addEdge(int u, int v, int w) {
+    if(V.find(u) == V.end())
+        V.insert({u, new Vertex(u)});
+    if(V.find(v) == V.end())
+        V.insert({v, new Vertex(v)});
+    V.at(u)->adj.insert({v, w});
+}
 
-};
-
-void Graph::addEdge(edge e){
-
-};
-
-int Graph::getNVertex(){
-    return nVertex;
-};
-
-void Graph::buildFromFile(std::istream &f){
-    std::string line;
-    // inteiros para receber os números lidos
-    int a, b, c;
-    // último valor adicionado (para saber se é valor novo ou não)
-    // -1 é um bom valor inicial para lastVertex.v
-    // pois sabe-se que os vértices têm apenas valores inteiros positivos
-    // TODO: colocar isso nas documentações/exemplos (coisa da ordem)
-    vertex aux_v;
-    aux_v.value = -1;
-    vertex *lastVertex = &aux_v;
-    // pega a primeira linha (número de vértices)
-    std::getline(f, line);
-    std::istringstream(line) >> a;
-    this->nVertex = a;
-    // iterando pelo restante dos dados
-    while (std::getline(f, line)){
-        vertex *vu;
-        vertex *vv;
-        std::istringstream(line) >> a >> b >> c;
-        if(a != lastVertex->value){
-            vertex v;
-            v.value = a;
-            V.push_back(v);
-            vu = &v;
-        }
-        else{
-            vu = lastVertex;
-        }
-
-        if(b != a){
-            vertex v;
-            v.value = b;
-            V.push_back(v);
-            vv = &v;
-            lastVertex = &v;
-        }
-
-        edge e;
-        e.u = vu;
-        e.v = vv;
-        e.w = c;
-
-        E.push_back(e);
+void Graph::initialize_single_source(int s){
+    for (std::unordered_map<int, Vertex*>::iterator v = V.begin(); v != V.end(); v++) {
+        v->second->d = std::numeric_limits<int>::max();
+        v->second->pi = nullptr; // a indexação de um vértice nunca é negativa, logo pode-se usar -1 como "nulo"
     }
+    V.at(s)->d = 0;
+}
 
-    for(vertex v: V){
-        std::cout << v.value << ' ';
+Vertex* Graph::extract_min(std::unordered_map<int, Vertex*> *queue) {
+    std::unordered_map<int, Vertex*>::iterator min = queue->begin();
+    for (std::unordered_map<int, Vertex*>::iterator v = ++queue->begin(); v != queue->end(); v++)
+        if(v->second->d < min->second->d)
+            min = v;
+    queue->erase(min->first);
+    std::cout << "\n" << min->first << "\n";
+    return min->second;
+}
+
+void Graph::relax(Vertex *u, Vertex *v, int w) {
+    if(v->d > (u->d + w)){
+        v->d = u->d + w;
+        v->pi = u;
     }
-};
+}
+
+void Graph::dijkstra(int s) {
+    initialize_single_source(s);
+    std::unordered_map<int, Vertex*> Q(V);
+    Vertex *u;
+    while(!Q.empty()){
+        u = extract_min(&Q);
+        for (std::unordered_map<int, int>::iterator v = u->adj.begin(); v != u->adj.end(); v++) {
+            relax(u, V.at(v->first), v->second);
+        }
+    }
+}
+
+std::string Graph::to_string() {
+    std::string res = "Número de vértices: " + std::to_string(this->n) + "\n";
+
+    /*for (std::map<int, Vertex*>::iterator it = V->begin(); it != V->end(); it++) {
+        for (std::map<int, int>::iterator it_s = it->second->adj()->begin(); it_s != it->second->adj()->end(); it_s++) {
+            res.append(std::to_string(it->first) + "->" + std::to_string(it_s->first) + ", w: " + std::to_string(it_s->second) + "\n");
+        }
+    }*/
+
+    return res;
+}

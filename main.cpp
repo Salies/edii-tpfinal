@@ -5,9 +5,9 @@
 
 int main() {
     std::ifstream infile("grafo.txt");
-    Graph *G = new Graph();
-    G->buildFromFile(infile);
-    std::cout << "\n" << G->getNVertex() << "\n";
+    Graph *G = new Graph(infile);
+    //std::cout << G->to_string();
+    G->dijkstra(1);
 
     return 0;
 }
