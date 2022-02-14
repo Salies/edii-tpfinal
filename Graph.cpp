@@ -173,7 +173,7 @@ std::string Graph::get_log() {
             path.insert(0, std::to_string(v->pi) + " -> ");
             v = V.at(v->pi);
         }
-        path.append("(peso " + std::to_string(vit->second->d) +  ")\n");
+        path.append("(peso " + (vit->second->d == std::numeric_limits<int>::max() ? "inf" : std::to_string(vit->second->d)) +  ")\n");
         path.insert(0, std::to_string(vit->first) + ": ");
         log.append(path);
     }
