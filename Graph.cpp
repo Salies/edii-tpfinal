@@ -2,7 +2,7 @@
 #pragma clang diagnostic ignored "-Wunknown-pragmas"
 #pragma ide diagnostic ignored "misc-no-recursion"
 //
-// Created by danie on 04/02/2022.
+// Daniel Serezane <daniel.serezane@unesp.br>
 //
 
 #include "Graph.h"

@@ -1,5 +1,5 @@
 //
-// Created by danie on 04/02/2022.
+// Daniel Serezane <daniel.serezane@unesp.br>
 //
 
 #ifndef GRAPH_H
