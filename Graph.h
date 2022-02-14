@@ -23,23 +23,27 @@ class Graph {
 public:
     Graph(std::istream &f);
     ~Graph(){};
-    std::string to_string(); // Imprime informações básicas sobre o grafo
     void dijkstra(int s);
     void dag_shortest_paths(int s);
+    std::string get_log();
 protected:
     int n; // número de vértices
     std::unordered_map<int, Vertex*> V;
+    std::string log; // log de operações, a ser imprimido
     enum Color {white, gray, black};
     void addEdge(int u, int v, int w);
     // Funções auxiliares
     void initialize_single_source(int s);
     int extract_min(std::unordered_map<int, Vertex*> *queue);
-    void relax(Vertex *u, int uid, Vertex *v, int w);
+    void relax(Vertex *u, int uid, Vertex *v, int vid, int w);
     // Implementação parcial (faltando armazenar os tempos) de dfs
-    // apenaspara criar a topsort
+    // apenaspara criar a topological_sort
     std::vector<int> dfs();
     void dfs_visit(int uid, Vertex *u, std::vector<int> *f);
-    std::vector<int> topsort();
+    std::vector<int> topological_sort();
+    void log_graph(); // Imprime informações básicas sobre o grafo
+    // Função de impressão da fila Q, apenas para fins de log
+    void log_q(std::unordered_map<int, Vertex*> *queue);
 };
 
 

@@ -8,7 +8,9 @@ int main() {
     std::ifstream infile_dag("grafo2.txt");
     Graph DAG(infile_dag);
     DAG.dag_shortest_paths(0);
-    std::cout << G.to_string();
-    std::cout << DAG.to_string();
+    //std::cout << G.to_string();
+    //std::cout << DAG.to_string();
+    std::cout << G.get_log();
+    std::cout << DAG.get_log();
     return 0;
 }
