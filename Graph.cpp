@@ -11,7 +11,7 @@ Graph::Graph(std::istream &f){
     int a, b, c; // variáveis para receber os valores
     f >> a;
     n = a;
-    log = "\n";
+    log = "LOG DE PROCESSAMENTO\n";
     while(f >> a >> b >> c){
         addEdge(a, b, c);
     }
@@ -138,6 +138,23 @@ void Graph::log_graph() {
 }
 
 std::string Graph::get_log() {
+    // Imprimindo os menores caminhos
+    Vertex *v;
+    std::string path;
+    log.append("\n\nCaminhos gerados:\n");
+    for (std::unordered_map<int, Vertex*>::iterator vit = V.begin(); vit != V.end(); vit++) {
+        path = "";
+        v = vit->second;
+        path.append(std::to_string(vit->first) + " ");
+        while(v->pi != -1){
+            path.insert(0, std::to_string(v->pi) + " -> ");
+            v = V.at(v->pi);
+        }
+        path.append("(peso " + std::to_string(vit->second->d) +  ")\n");
+        path.insert(0, std::to_string(vit->first) + ": ");
+        log.append(path);
+    }
+    log.append("\nArquivo produzido pelo dssp\nDaniel Serezane <daniel.serezane@unesp.br>");
     return log;
 }
 
