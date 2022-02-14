@@ -16,20 +16,20 @@ struct Vertex {
     int d; // distância da fonte até o vértice
     int color; // "cor" do vértice, usada na DFS
     std::unordered_map<int, int> adj; // vértices adjacentes <chave, peso>
-    Vertex(){}
+    Vertex() : pi(-1), d(-1), color(-1){} // inicializa apenas por convenção
 };
 
 class Graph {
 public:
-    Graph(std::istream &f);
-    ~Graph(){};
+    explicit Graph(std::istream &f);
+    ~Graph()= default;;
     void dijkstra(int s);
     void dag_shortest_paths(int s);
     std::string get_log();
 protected:
     int n; // número de vértices
     std::unordered_map<int, Vertex*> V;
-    std::string log; // log de operações, a ser imprimido
+    std::string log; // log de operações, a ser impresso
     enum Color {white, gray, black};
     void addEdge(int u, int v, int w);
     // Funções auxiliares

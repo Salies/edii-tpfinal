@@ -1,10 +1,8 @@
 #include "Graph.h"
 #include <iostream>
 #include <sstream>
-#include <fstream>
 
 int main(int argc, char *argv[]) {
-    std::cout << argc << ' ' << argv[1] << "\n";
     if(argc != 5) {
         std::cerr << "\nERRO: falta ou excesso de argumentos. Deve haver exatamente 4 argumentos.";
         return 1;
@@ -34,5 +32,6 @@ int main(int argc, char *argv[]) {
     std::ofstream outfile(argv[4]);
     std::string txt = G.get_log();
     outfile << txt;
+
     return 0;
 }
