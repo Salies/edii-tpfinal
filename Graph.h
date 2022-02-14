@@ -13,7 +13,7 @@
 // são irrelevantes para os algoritmos pertinentes ao trabalho
 struct Vertex {
     int pi; // predecessor no menor caminho
-    int d; // distância até a fonte
+    int d; // distância da fonte até o vértice
     int color; // "cor" do vértice, usada na DFS
     std::unordered_map<int, int> adj; // vértices adjacentes <chave, peso>
     Vertex(){}

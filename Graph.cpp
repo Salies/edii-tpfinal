@@ -7,6 +7,8 @@
 #include <vector>
 #include <limits>
 
+#include <iostream>
+
 Graph::Graph(std::istream &f){
     int a, b, c; // variáveis para receber os valores
     f >> a;
@@ -43,6 +45,9 @@ int Graph::extract_min(std::unordered_map<int, Vertex*> *queue) {
 }
 
 void Graph::relax(Vertex *u, int uid, Vertex *v, int w) {
+    // Verificação para evitar um possível overflow com u.d + w > max
+    // prevenindo a função de operar corretamente
+    if(u->d == std::numeric_limits<int>::max() && w >= 0) return;
     if(v->d > (u->d + w)){
         v->d = u->d + w;
         v->pi = uid;
@@ -113,11 +118,13 @@ void Graph::dag_shortest_paths(int s) {
 std::string Graph::to_string() {
     std::string res = "Número de vértices: " + std::to_string(this->n) + "\n";
 
-    /*for (std::map<int, Vertex*>::iterator it = V->begin(); it != V->end(); it++) {
-        for (std::map<int, int>::iterator it_s = it->second->adj()->begin(); it_s != it->second->adj()->end(); it_s++) {
-            res.append(std::to_string(it->first) + "->" + std::to_string(it_s->first) + ", w: " + std::to_string(it_s->second) + "\n");
+    for (std::unordered_map<int, Vertex*>::iterator it = V.begin(); it != V.end(); it++) {
+        std::cout << it->first << " d: " << it->second->d << " pi: " << it->second->pi << " adj: ";
+        for (std::unordered_map<int, int>::iterator it2 = it->second->adj.begin(); it2 != it->second->adj.end(); it2++) {
+            std::cout << ' ' << it2->first;
         }
-    }*/
+        std::cout << "\n";
+    }
 
     return res;
 }
